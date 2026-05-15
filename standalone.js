@@ -202,6 +202,7 @@ function cardTemplate(item, index) {
           <span class="back-line"></span>
         </span>
         <span class="card-face card-front">
+          <span class="front-aura" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
           <span class="card-number">${String(card.id).padStart(2, "0")}</span>
           <span class="card-symbol">${card.symbol}</span>
           <span class="card-name">${escapeHtml(card.name)}</span>

@@ -491,11 +491,14 @@ h3 {
   position: absolute;
   left: 18px;
   top: 15px;
+  z-index: 2;
   color: rgba(255, 246, 220, 0.78);
   font-size: 0.78rem;
 }
 
 .card-symbol {
+  position: relative;
+  z-index: 2;
   display: grid;
   width: 74px;
   height: 74px;
@@ -513,18 +516,24 @@ h3 {
 }
 
 .card-name {
+  position: relative;
+  z-index: 2;
   color: #fff7e4;
   font-family: Georgia, "Times New Roman", "Microsoft YaHei", serif;
   font-size: 1.5rem;
 }
 
 .card-english {
+  position: relative;
+  z-index: 2;
   color: color-mix(in srgb, var(--glow) 72%, #ffffff 28%);
   font-size: 0.75rem;
   text-transform: uppercase;
 }
 
 .keyword-row {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -539,6 +548,73 @@ h3 {
   color: rgba(255, 248, 235, 0.86);
   background: rgba(255, 255, 255, 0.06);
   font-size: 0.72rem;
+}
+
+.front-aura {
+  position: absolute;
+  inset: 20px;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--glow) 42%, transparent);
+  opacity: 0.72;
+  filter: drop-shadow(0 0 12px color-mix(in srgb, var(--glow) 38%, transparent));
+  animation: frontAuraTurn 9s linear infinite;
+}
+
+.front-aura::before,
+.front-aura::after {
+  content: "";
+  position: absolute;
+  inset: 18%;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 245, 218, 0.12);
+}
+
+.front-aura::after {
+  inset: 34%;
+  border-color: color-mix(in srgb, var(--glow) 22%, transparent);
+}
+
+.front-aura i {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #fff1c8;
+  box-shadow:
+    0 0 8px rgba(255, 241, 200, 0.82),
+    0 0 16px color-mix(in srgb, var(--glow) 52%, transparent);
+  animation: frontStarPulse 1.9s ease-in-out infinite alternate;
+}
+
+.front-aura i:nth-child(1) {
+  left: 50%;
+  top: -3px;
+}
+
+.front-aura i:nth-child(2) {
+  right: 3px;
+  top: 30%;
+  animation-delay: -0.4s;
+}
+
+.front-aura i:nth-child(3) {
+  right: 18%;
+  bottom: 5%;
+  animation-delay: -0.8s;
+}
+
+.front-aura i:nth-child(4) {
+  left: 18%;
+  bottom: 7%;
+  animation-delay: -1.2s;
+}
+
+.front-aura i:nth-child(5) {
+  left: 1px;
+  top: 38%;
+  animation-delay: -1.6s;
 }
 
 .is-empty .oracle-card {
@@ -1350,6 +1426,26 @@ h2,
   from {
     opacity: 0.42;
     transform: scale(0.65);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.28);
+  }
+}
+
+@keyframes frontAuraTurn {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes frontStarPulse {
+  from {
+    opacity: 0.34;
+    transform: scale(0.72);
   }
   to {
     opacity: 1;
