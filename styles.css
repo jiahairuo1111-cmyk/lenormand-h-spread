@@ -1693,89 +1693,9 @@ h1 {
   }
 }
 
-/* Final mobile guardrail for the live Netlify build. Earlier layers tune the
-   table, this one keeps the revealed spread readable in phone browsers. */
 @media (max-width: 840px) {
-  .spread-stage {
-    min-height: 700px;
-    padding: 54px 8px 36px;
-  }
-
-  .stage-halo {
-    width: 330px;
-    height: 330px;
-  }
-
-  .orbit-one {
-    width: 360px;
-    height: 360px;
-  }
-
-  .orbit-two {
-    width: 215px;
-    height: 215px;
-  }
-
-  .h-spread {
-    grid-template-columns: 122px 122px;
-    grid-template-rows: 178px 178px 178px;
-    gap: 38px 22px;
-  }
-
-  .oracle-card {
-    width: 122px;
-    height: 170px;
-  }
-
-  .position-label {
-    top: -32px;
-    max-width: 150px;
-    font-size: 0.72rem;
-    line-height: 1.16;
-    white-space: nowrap;
-    text-shadow:
-      0 0 2px rgba(255, 255, 255, 0.8),
-      0 0 8px rgba(255, 255, 255, 0.28),
-      0 0 14px rgba(210, 226, 255, 0.2);
-    -webkit-text-stroke: 0.18px rgba(255, 255, 255, 0.35);
-  }
-
-  .oracle-card.is-revealed::before {
-    opacity: 0.3;
-  }
-
-  .front-aura {
-    inset: 28px 22px 22px;
-    opacity: 0.38;
-    filter: drop-shadow(0 0 8px color-mix(in srgb, var(--glow) 36%, transparent));
-  }
-
-  .front-aura::before {
-    inset: 16%;
-    border-color: color-mix(in srgb, var(--glow) 26%, transparent);
-  }
-
-  .front-aura::after {
-    inset: 42%;
-    border-color: color-mix(in srgb, var(--glow) 18%, transparent);
-  }
-
-  .front-aura i {
-    width: 3px;
-    height: 3px;
-    box-shadow: 0 0 7px color-mix(in srgb, var(--glow) 62%, #fff7d6);
-    opacity: 0.62;
-  }
-}
-
-@media (max-width: 390px) {
-  .h-spread {
-    grid-template-columns: 116px 116px;
-    gap: 40px 18px;
-  }
-
-  .oracle-card {
-    width: 116px;
-    height: 162px;
+  .oracle-card.is-revealed .back-symbol {
+    opacity: 0;
+    visibility: hidden;
   }
 }
