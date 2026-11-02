@@ -1,0 +1,63 @@
+:root, body { background: #e5eaf2; color: #504858; }
+.shell { background: #e5eaf2; isolation: isolate; }
+.shell::before {
+  inset: -2%; background: url("./dream-mist-v1.png") center / cover no-repeat;
+  opacity: 1; z-index: -3; animation: mistBreathe 24s ease-in-out infinite alternate;
+}
+.shell::after, .aura, .stars, .hand-light { display: none; }
+.oracle-panel, .reading-panel {
+  background: transparent; border: 0; border-radius: 0; box-shadow: none;
+  backdrop-filter: none;
+}
+.masthead { position: relative; justify-content: center; padding: 18px 0 30px; text-align: center; }
+.masthead > div:first-child { min-width: 0; }
+.masthead .kicker { color: #74697d; font-size: 11px; margin-bottom: 14px; }
+.masthead h1 {
+  width: auto; font-size: 48px; line-height: 1.35; font-weight: 500;
+  font-family: "Songti SC", "Noto Serif SC", "Microsoft YaHei", serif;
+  color: #5e526a; letter-spacing: 0; -webkit-text-stroke: 0;
+  filter: none; text-shadow: 0 2px 0 #ffffffb3;
+}
+.masthead h1::before { display: none; }
+.masthead h1::after {
+  position: relative; display: block; content: "·  ✧  ·";
+  width: 180px; height: auto; left: auto; right: auto; bottom: auto;
+  margin: 13px auto 0; padding-top: 6px; border-top: 1px solid #9f8fa64d;
+  background: none; color: #8d7f97; opacity: 1; font: 16px Georgia, serif; filter: none;
+}
+.masthead .sigil { display: none; }
+.question-bar label, .kicker, .ritual-actions p { color: #665c70; }
+.question-input input {
+  background: #fffdfbba; color: #4e4459; border-color: #b4a6be80;
+  box-shadow: 0 3px 12px #5f536507;
+}
+.question-input input::placeholder { color: #81768b; }
+.question-input input:focus { background: #fffdfbea; border-color: #8c789e; box-shadow: 0 0 0 3px #b4a6be22; }
+.primary-action { background: #ece4ee; color: #55465f; border-color: #b9a7bf8c; box-shadow: inset 0 1px #fff, 0 4px 15px #76638113; }
+.secondary-action { background: #fffdf9a6; color: #5b4f66; border-color: #b9a7bf8c; box-shadow: none; }
+.spread-stage { background: transparent; border: 0; box-shadow: none; }
+.spread-stage::before, .spread-stage::after, .stage-halo, .orbit-ring { display: none; }
+.position-label { color: #62516f; text-shadow: 0 1px 3px #fff; font-weight: 500; }
+.card-back {
+  background: #e8eaf1 url("./card-back-v1.png") center / 100% 100% no-repeat;
+  border: 1px solid #fffdf6; box-shadow: 0 8px 22px #5d4c6a26;
+}
+.card-back::before, .card-back::after, .back-symbol, .back-line, .back-constellation { display: none; }
+.reading-panel { color: #514759; }
+.reading-panel h2, .reading-panel h3 { color: #554661; }
+.reading-summary, .reading-card, .verdict {
+  color: #514759; background: #fffcf8b8; border-color: #b7a6be55;
+  box-shadow: none;
+}
+.reading-summary p, .reading-card p, .verdict p, .reading-summary li { color: #514759; }
+.reading-card > span { color: #7a668a; }
+@keyframes mistBreathe { from { transform: scale(1); } to { transform: scale(1.035); } }
+@media (max-width: 840px) {
+  .masthead { padding: 14px 0 20px; }
+  .masthead h1 { font-size: 32px; }
+  .masthead .kicker { font-size: 10px; }
+}
+@media (max-width: 360px) { .masthead h1 { font-size: 28px; } }
+@media (prefers-reduced-motion: reduce) {
+  .shell::before, .oracle-card, .card-inner { animation: none; transition: none; }
+}

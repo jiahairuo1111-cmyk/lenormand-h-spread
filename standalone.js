@@ -204,7 +204,7 @@ function cardTemplate(item, index) {
         <span class="card-face card-front">
           <span class="front-aura" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
           <span class="card-number">${String(card.id).padStart(2, "0")}</span>
-          <span class="card-symbol">${card.symbol}</span>
+          <span class="card-art" role="img" aria-label="${escapeHtml(card.name)}插画" style="--art-x:${((card.id - 1) % 6) * 20}%;--art-y:${Math.floor((card.id - 1) / 6) * 20}%"></span>
           <span class="card-name">${escapeHtml(card.name)}</span>
           <span class="card-english">${escapeHtml(card.english)}</span>
           <span class="keyword-row">${keywords}</span>
@@ -318,78 +318,7 @@ function normalizeQuestion(input) {
 }
 
 function generateReading(question, spread) {
-  const score = spread.reduce((total, item) => total + weightedScore(item), 0);
-  const center = spread.find((item) => item.position.id === "center") ?? spread[2];
-  const outcome = spread.find((item) => item.position.id === "rightBottom") ?? spread[4];
-  const obstacle = spread.find((item) => item.position.id === "leftBottom") ?? spread[1];
-  const supportCount = spread.filter((item) => item.card.directionSignal.score > 0).length;
-  const riskCount = spread.filter((item) => item.card.directionSignal.score < 0).length;
-
-  return {
-    summary: buildSummary(question, score, supportCount, riskCount, center.card, outcome.card),
-    positionReadings: spread.map(({ card, position }) => ({
-      card,
-      position,
-      text: `${position.questionRole} ${card.name}提示：${card.meaning} 这里的判断倾向为「${card.directionSignal.label}」。需要留意的是，${card.caution}`,
-    })),
-    combinations: buildCombinations(center.card, obstacle.card, outcome.card, spread),
-    verdict: buildVerdict(question, score, center.card, outcome.card),
-    advice: buildAdvice(score, center.card, obstacle.card, outcome.card),
-  };
-}
-
-function weightedScore(item) {
-  const weight = item.position.id === "center" ? 1.8 : item.position.id === "rightBottom" ? 1.4 : 1;
-  return item.card.directionSignal.score * weight;
-}
-
-function buildSummary(question, score, supportCount, riskCount, center, outcome) {
-  const stance = score >= 5
-    ? "整体牌面明显偏向支持"
-    : score >= 2
-      ? "整体牌面偏向可以推进，但需要边走边校准"
-      : score > -2
-        ? "整体牌面处在可观察区，答案还不适合被说成绝对正确或错误"
-        : score > -5
-          ? "整体牌面提示阻力较重，暂时不宜盲目推进"
-          : "整体牌面显示高风险信号较集中，需要先暂停和复盘";
-  return `${stance}。围绕「${question}」，中心牌${center.name}指出真正关键在于${center.keywords.join("、")}；结果位${outcome.name}则让这件事的后续倾向落在${outcome.keywords.join("、")}。本次有 ${supportCount} 张支持牌、${riskCount} 张风险牌，因此结论应看作方向校准，而不是命运宣判。`;
-}
-
-function buildCombinations(center, obstacle, outcome, spread) {
-  const visible = spread.find((item) => item.position.id === "leftTop")?.card;
-  const external = spread.find((item) => item.position.id === "rightTop")?.card;
-  const combinations = [
-    `中心${center.name} + 结果${outcome.name}：核心课题若处理得当，最可能把局面带向「${outcome.keywords.join("、")}」。若结果牌偏风险，则表示需要先解决核心牌揭示的问题。`,
-    `根部${obstacle.name} + 中心${center.name}：底层阻力会直接影响你的判断。${obstacle.directionSignal.score < 0 ? "这组牌要求先止损、澄清或降低消耗，再谈推进。" : "这组牌说明阻力并非不可用，它也可能成为稳定推进的资源。"}`,
-  ];
-  if (visible && external) {
-    combinations.push(`显象${visible.name} + 外部${external.name}：你看到的表面讯号与外界回应需要一起读。若两张牌方向一致，行动会更顺；若一张支持一张阻滞，就要把期待和现实反馈分开验证。`);
-  }
-  const highRisk = spread.filter((item) => item.card.directionSignal.score <= -2);
-  if (highRisk.length > 0) {
-    combinations.push(`风险提示：${highRisk.map((item) => item.card.name).join("、")}属于强提醒牌，表示这件事至少有一处代价、结束、阻碍或责任不可忽略。`);
-  }
-  return combinations;
-}
-
-function buildVerdict(question, score, center, outcome) {
-  if (score >= 5) return `对「${question}」的判断：倾向于是正确方向，而且中心牌${center.name}与结果牌${outcome.name}共同支持继续推进。建议保持清晰行动，不必因为短期噪音而动摇。`;
-  if (score >= 2) return `对「${question}」的判断：倾向是可推进的方向，但不是无条件正确。它需要你按照${center.name}提示的核心课题去校准，并观察${outcome.name}所代表的后续反馈。`;
-  if (score > -2) return `对「${question}」的判断：现在更像是“需要验证的方向”。牌面没有完全否定，但也没有给出足够稳定的支持，适合先做小范围试探。`;
-  if (score > -5) return `对「${question}」的判断：暂时不建议把它认定为正确方向。牌面显示阻力和代价偏重，除非你能先解决${center.name}揭示的核心问题。`;
-  return `对「${question}」的判断：目前高风险信号明显，不宜继续以原方式推进。更严谨的做法是暂停、止损，或重新定义你真正想要抵达的方向。`;
-}
-
-function buildAdvice(score, center, obstacle, outcome) {
-  const base = [
-    `先把${center.name}对应的「${center.keywords[0]}」写成一个可执行动作，而不是只停留在感觉。`,
-    `检查${obstacle.name}带来的提醒：${obstacle.caution}`,
-    `用${outcome.name}作为观察指标，未来一段时间重点看是否出现「${outcome.keywords.join("、")}」的具体反馈。`,
-  ];
-  if (score >= 2) return [...base, "可以继续推进，但建议保留复盘节点，让热情和证据一起前进。"];
-  if (score > -2) return [...base, "先做小规模测试，不急着公开承诺或投入不可逆资源。"];
-  return [...base, "在关键事实澄清前，避免追加投入；必要时把目标拆小或换一条更少消耗的路径。"];
+  return globalThis.lenormandReading(question, spread);
 }
 
 function emptySpread() {
